@@ -10,15 +10,24 @@ const OtpComponent = () => {
     const [bit5, setBit5] = useState('')
     // 
     const [current, setCurrent] = useState({
-        id: null,
+        // shift_focus => 'forward', 'stay' 'backward'
+        id: 1,
         shift_focus: false
     });
 
     useEffect(() => {
         if (current.id) {
             let target
-            if (current.shift_focus) {
+            if (current.shift_focus === 'forward') {
                 target = document.getElementById(current.id + 1)
+                if (!target) {
+                    target = document.getElementById(current.id)
+                }
+                target.focus()
+            }
+
+            else if (current.shift_focus === 'backward') {
+                target = document.getElementById(current.id - 1)
                 if (!target) {
                     target = document.getElementById(current.id)
                 }
@@ -32,24 +41,14 @@ const OtpComponent = () => {
     }, [current])
 
     const setFocusFlow = (event) => {
-
         if (event.target.value) {
             setCurrent(
                 {
                     id: parseInt(event.target.id),
-                    shift_focus: true
+                    shift_focus: 'forward'
                 }
             )
         }
-        else {
-            setCurrent(
-                {
-                    id: parseInt(event.target.id),
-                    shift_focus: false
-                }
-            )
-        }
-
     }
 
     const RenderInput = ({ id, placeholder, value, onChange, autoFocus, myRef }) => {
@@ -60,6 +59,20 @@ const OtpComponent = () => {
             value={value}
             placeholder={placeholder}
             onChange={onChange}
+            onKeyDown={event => {
+                if (event.code === 'Backspace') {
+                    setTimeout(() => {
+                        setCurrent(
+                            {
+                                id: parseInt(event.target.id),
+                                shift_focus: 'backward'
+                            }
+                        )
+                    }, 10);
+                }
+            }
+
+            }
             onKeyPress={(e) => {
                 if (e.code === 'Minus' || e.code === 'Equal' || e.code === 'Period' || value.length >= 1) {
                     e.preventDefault();
@@ -81,7 +94,7 @@ const OtpComponent = () => {
                     setFocusFlow(event)
 
                 }}
-                autoFocus={true}
+            // autoFocus={true}
             />
             <RenderInput
                 id={'2'}
