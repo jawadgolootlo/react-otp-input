@@ -40,7 +40,7 @@ const OtpComponent = () => {
         }
     }, [current])
 
-    const setFocusFlow = (event) => {
+    const setFocusFlowForward = (event) => {
         if (event.target.value) {
             setCurrent(
                 {
@@ -49,6 +49,18 @@ const OtpComponent = () => {
                 }
             )
         }
+    }
+
+    const setFocusFlowBackward = (event) => {
+        setTimeout(() => {
+            setCurrent(
+                {
+                    id: parseInt(event.target.id),
+                    shift_focus: 'backward'
+                }
+            )
+        }, 10);
+
     }
 
     const RenderInput = ({ id, placeholder, value, onChange, autoFocus, myRef }) => {
@@ -61,18 +73,9 @@ const OtpComponent = () => {
             onChange={onChange}
             onKeyDown={event => {
                 if (event.code === 'Backspace') {
-                    setTimeout(() => {
-                        setCurrent(
-                            {
-                                id: parseInt(event.target.id),
-                                shift_focus: 'backward'
-                            }
-                        )
-                    }, 10);
+                    setFocusFlowBackward(event)
                 }
-            }
-
-            }
+            }}
             onKeyPress={(e) => {
                 if (e.code === 'Minus' || e.code === 'Equal' || e.code === 'Period' || value.length >= 1) {
                     e.preventDefault();
@@ -91,7 +94,7 @@ const OtpComponent = () => {
                 value={bit1}
                 onChange={(event) => {
                     setBit1(event.target.value)
-                    setFocusFlow(event)
+                    setFocusFlowForward(event)
 
                 }}
             // autoFocus={true}
@@ -102,7 +105,7 @@ const OtpComponent = () => {
                 value={bit2}
                 onChange={(event) => {
                     setBit2(event.target.value)
-                    setFocusFlow(event)
+                    setFocusFlowForward(event)
                 }}
             />
 
@@ -112,7 +115,7 @@ const OtpComponent = () => {
                 value={bit3}
                 onChange={(event) => {
                     setBit3(event.target.value)
-                    setFocusFlow(event)
+                    setFocusFlowForward(event)
                 }}
             />
             <p style={{ fontSize: 30, color: "black" }}  >-</p>
@@ -122,7 +125,7 @@ const OtpComponent = () => {
                 value={bit4}
                 onChange={(event) => {
                     setBit4(event.target.value)
-                    setFocusFlow(event)
+                    setFocusFlowForward(event)
                 }}
             />
             <RenderInput
@@ -131,7 +134,7 @@ const OtpComponent = () => {
                 value={bit5}
                 onChange={(event) => {
                     setBit5(event.target.value)
-                    setFocusFlow(event)
+                    setFocusFlowForward(event)
                 }}
             />
 
